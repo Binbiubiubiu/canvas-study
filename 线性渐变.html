@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>线性渐变</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 400px;
+            height: 400px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body onload="draw()">
+    <canvas id="canvas" width="400" height="400">
+        浏览器不支持canvas
+    </canvas>
+    <script>
+        function draw() {
+            const canvas = document.getElementById('canvas');
+            const cvsCtx = canvas.getContext('2d');
+
+            const lingrad = cvsCtx.createLinearGradient(0, 0, 0, 150);
+            lingrad.addColorStop(0, "red");
+            lingrad.addColorStop(.5, "green");
+            lingrad.addColorStop(.5, "blue");
+            lingrad.addColorStop(1, "yellow");
+
+            cvsCtx.fillStyle = lingrad;
+            cvsCtx.fillRect(0, 0, 200, 200);
+
+        }
+
+
+    </script>
+</body>
+
+</html>

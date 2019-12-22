@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>绘制三角形</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body onload="draw()">
+    <canvas id="canvas" width="300" height="300">
+        浏览器不支持canvas
+    </canvas>
+    <script>
+        function draw() {
+            const canvas = document.getElementById('canvas');
+            const cvsCtx = canvas.getContext('2d');
+            cvsCtx.fillStyle = '#000';
+            cvsCtx.strokeStyle = '#000';
+
+            cvsCtx.beginPath();
+            cvsCtx.moveTo(25, 25);
+            cvsCtx.lineTo(25, 250);
+            cvsCtx.lineTo(250, 25);
+            cvsCtx.closePath();
+            cvsCtx.fill();
+
+            cvsCtx.beginPath();
+            cvsCtx.moveTo(275, 50);
+            cvsCtx.lineTo(275, 275);
+            cvsCtx.lineTo(50, 275);
+            cvsCtx.closePath();
+            cvsCtx.stroke();
+
+            cvsCtx.moveTo(0, 300);
+            cvsCtx.lineTo(300, 0);
+            cvsCtx.stroke();
+
+        }
+    </script>
+</body>
+
+</html>
