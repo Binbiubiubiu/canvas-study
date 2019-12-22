@@ -40,6 +40,14 @@
                 const y = 50 + ~~(i / 4) * 100;
 
                 cvsCtx.beginPath();
+                /**
+                * 参数1 x轴位置
+                * 参数2 y轴位置
+                * 参数3 半径
+                * 参数4 开始角度
+                * 参数5 结束角度
+                * 参数6 是否逆时针 (默认false 顺时针绘制)
+                */
                 cvsCtx.arc(x, y, 30, 0, Math.PI + i * Math.PI * Math.random() / 2, 10 * Math.random() > 6);
                 10 * Math.random() > 6 ? cvsCtx.fill() : cvsCtx.stroke();
             }

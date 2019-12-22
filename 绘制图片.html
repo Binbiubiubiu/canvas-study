@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>绘制矩形</title>
+    <title>绘制图片</title>
     <style>
         html,
         body {
@@ -17,38 +17,39 @@
         }
 
         canvas {
-            width: 300px;
-            height: 300px;
+            width: 400px;
+            height: 400px;
             border: 1px solid #000;
         }
     </style>
 </head>
 
 <body onload="draw()">
-    <canvas id="canvas" width="300" height="300">
+    <canvas id="canvas" width="400" height="400">
         浏览器不支持canvas
     </canvas>
     <script>
         function draw() {
             const canvas = document.getElementById('canvas');
             const cvsCtx = canvas.getContext('2d');
-            // 画笔填充样式
-            cvsCtx.fillStyle = '#000';
-            // 画笔路径样式
-            cvsCtx.strokeStyle = '#000';
 
-            /**
-            * 三个方法参数类似
-            * 参数1 x轴位置
-            * 参数2 y轴位置
-            * 参数3 宽度
-            * 参数4 高度
-            */
-            cvsCtx.fillRect(0, 0, 300, 300);
-            cvsCtx.clearRect(50, 50, 200, 200);
-            cvsCtx.strokeRect(100, 100, 100, 100);
+            const img = new Image();
+            img.src = "https://i0.hdslb.com/bfs/face/d19a34d4f2081baed11d575a516487763605b374.jpg@72w_72h.webp"
+
+            // 必须要图片加载完成
+            img.onload = () => {
+                /** 创建图片材质 
+                * 参数1 图片资源
+                * 参数2 图片绘制规则 no-repeat:不重复; repeat-x:水平排列;repeat-y:竖直排列;
+                */
+                const ptrn = cvsCtx.createPattern(img, "no-repeat");
+                cvsCtx.fillStyle = ptrn;
+                cvsCtx.fillRect(0, 0, 200, 200);
+            }
 
         }
+
+
     </script>
 </body>
 

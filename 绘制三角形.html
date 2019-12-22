@@ -35,11 +35,16 @@
             cvsCtx.fillStyle = '#000';
             cvsCtx.strokeStyle = '#000';
 
+            // 画笔开始路径
             cvsCtx.beginPath();
+            // 画笔移动 x轴y轴 坐标
             cvsCtx.moveTo(25, 25);
+            // 画笔绘制 x轴y轴 坐标
             cvsCtx.lineTo(25, 250);
             cvsCtx.lineTo(250, 25);
+            // 画笔闭合路径
             cvsCtx.closePath();
+            // 填充闭合区域
             cvsCtx.fill();
 
             cvsCtx.beginPath();
@@ -47,6 +52,7 @@
             cvsCtx.lineTo(275, 275);
             cvsCtx.lineTo(50, 275);
             cvsCtx.closePath();
+            // 绘制闭合区域的路径
             cvsCtx.stroke();
 
             cvsCtx.moveTo(0, 300);

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>线性渐变</title>
+    <title>绘制文字阴影</title>
     <style>
         html,
         body {
@@ -33,21 +33,23 @@
             const canvas = document.getElementById('canvas');
             const cvsCtx = canvas.getContext('2d');
 
-            /**
-            * 参数1 起始点 x轴位置
-            * 参数2 起始点 y轴位置
-            * 参数3 起始点 x轴位置
-            * 参数4 起始点 y轴位置
+            // 设置文字 样式, 粗细, 大小, 字体
+            cvsCtx.font = 'bold italic 40px arial';
+            /** 填充文字
+            * 参数1 文字内容
+            * 参数2 x轴位置
+            * 参数3 y轴位置
+            * 参数4 最大长度
             */
-            const lingrad = cvsCtx.createLinearGradient(0, 0, 0, 150);
-            lingrad.addColorStop(0, "red");
-            lingrad.addColorStop(.5, "green");
-            lingrad.addColorStop(.5, "blue");
-            lingrad.addColorStop(1, "yellow");
+            cvsCtx.fillText('Hello World', 100, 100, 200);
+            cvsCtx.strokeText('Hello World', 100, 140, 200);
 
-            cvsCtx.fillStyle = lingrad;
-            cvsCtx.fillRect(0, 0, 200, 200);
+            cvsCtx.shadowColor = "red"; // 阴影颜色
+            cvsCtx.shadowOffsetX = 20; // 阴影水平偏移
+            cvsCtx.shadowOffsetY = 20; // 阴影垂直偏移
+            cvsCtx.shadowBlur = 5; // 阴影扩散半径
 
+            cvsCtx.fillText('Hello World', 100, 180, 200);
         }
 
 

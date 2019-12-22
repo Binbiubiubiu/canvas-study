@@ -33,6 +33,14 @@
             const canvas = document.getElementById('canvas');
             const cvsCtx = canvas.getContext('2d');
 
+            /**
+            * 参数1 起始圆 圆心x轴位置
+            * 参数2 起始圆 圆心y轴位置
+            * 参数3 起始圆 半径
+            * 参数4 结束圆 圆心x轴位置
+            * 参数5 结束圆 圆心y轴位置
+            * 参数6 结束圆 半径 
+            */
             const radgrad = cvsCtx.createRadialGradient(50, 50, 10, 50, 50, 30);
             radgrad.addColorStop(0, "red");
             radgrad.addColorStop(.9, "green");
