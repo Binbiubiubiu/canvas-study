@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>圆形碰撞检测</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 800px;
+            height: 600px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body onload="draw()">
+    <canvas id="canvas" width="800" height="600">
+        浏览器不支持canvas
+    </canvas>
+    <script>
+        function draw() {
+            const canvas = document.getElementById('canvas');
+            const cvsCtx = canvas.getContext('2d');
+
+            function Circle(x, y, r, color, speed) {
+                this.x = x;
+                this.y = y;
+                this.r = r;
+                this.color = color;
+                this.speed = speed;
+            }
+
+            Circle.prototype.draw = function () {
+                cvsCtx.beginPath();
+                cvsCtx.fillStyle = this.color;
+                cvsCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                cvsCtx.fill();
+                cvsCtx.closePath();
+            }
+
+            Circle.prototype.move = function () {
+                this.x += this.speed;
+
+                if (this.x >= canvas.width - this.r || this.x < this.r) {
+                    this.speed *= -1;
+                }
+            }
+
+            const circle1 = new Circle(50, 100, 50, 'red', 2);
+            const circle2 = new Circle(750, 100, 50, 'blue', -2)
+
+            circle1.draw();
+            circle2.draw();
+
+            function animate() {
+                // 清除画布
+                cvsCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+                circle1.draw();
+                circle2.draw();
+
+                circle1.move();
+                circle2.move();
+
+                // 检测
+                if (isCircleHit(circle1, circle2)) {
+                    circle1.speed *= -1
+                    circle2.speed *= -1
+                }
+
+                window.requestAnimationFrame(animate)
+            }
+
+            animate();
+
+            function isCircleHit(circle1, circle2) {
+                // 获取矩形最小x 和最大x
+                const min1 = circle1.x - circle1.r;
+                const min2 = circle2.x - circle2.r;
+
+                const max1 = circle1.x + circle1.r;
+                const max2 = circle2.x + circle2.r;
+
+                const min3 = Math.max(min1, min2);
+                const max3 = Math.min(max1, max2);
+
+                return min3 < max3;
+
+            }
+        }
+    </script>
+</body>
+
+</html>
