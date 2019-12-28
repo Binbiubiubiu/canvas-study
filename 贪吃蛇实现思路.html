@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>贪吃蛇实现思路</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 560px;
+            height: 400px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="560" height="400">
+        浏览器不支持canvas
+    </canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const cvsCtx = canvas.getContext('2d');
+
+        /* 贪吃蛇步骤
+        * 
+        * 1. 先把蛇画出来
+        *       1.1 蛇头和蛇身
+        * 2.让蛇动起来
+        *       2.1 添加键盘事件
+        *       2.2 aniamte运动
+        * 3.随机投放食物
+        *       3.1 坐标位置
+        *       3.2 食物是否投放到蛇头和蛇身上（数组重排）
+        * 4. 吃食物
+        *       4.1 碰撞检测
+        *       4.2 将食物添加到蛇身上
+        * 5. 边缘检测，判断游戏是否结束 
+        *       5.1 碰撞检测
+        *       5.2 Game over
+        */
+        const UNIT = 40;// 基础单位
+
+        // 获取随机数字
+        const getRandInRange = (min, max) => Math.round(Math.random() * (max - min) + min);
+
+        // 判断是否碰撞
+        function isRectHit(rect1, rect2) {
+
+            // 判断矩形相交的最大/最小值
+            const minX = Math.max(rect1.x, rect2.x);
+            const minY = Math.max(rect1.y, rect2.y);
+            const maxX = Math.min(rect1.x + rect1.width, rect2.x + rect2.width);
+            const maxY = Math.min(rect1.y + rect1.height, rect2.y + rect2.height);
+
+            return minX < maxX && minY < maxY;
+        }
+
+        class Rect {
+            constructor(x, y, width, height, color) {
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+                this.color = color;
+            }
+
+            draw() {
+                cvsCtx.beginPath();
+                cvsCtx.fillStyle = this.color;
+                cvsCtx.fillRect(this.x, this.y, this.width, this.height);
+                cvsCtx.strokeRect(this.x, this.y, this.width, this.height);
+            }
+        }
+
+        // 创建snake对象
+        class Snake {
+            constructor() {
+                // 画蛇头
+                this.header = new Rect(canvas.width / 2 - UNIT, canvas.height / 2 - UNIT, UNIT, UNIT, 'red');
+
+                /**
+                *   初始化方向
+                * ----------  --------
+                *   keyCode ｜  方向
+                * ----------  --------
+                *     37    ｜  左
+                *     38    ｜  上
+                *     39    ｜  右
+                *     40    ｜  下
+                */
+                this.direction = 39;
+
+
+                // 画蛇身
+                let x = this.header.x;
+                let y = this.header.y;
+                this.body = new Array(3).map(item => {
+                    x -= UNIT;
+                    return new Rect(x, y, UNIT, UNIT, 'gray');
+                });
+            }
+
+            draw() {
+                this.header.draw();
+                this.body.forEach(item => { item.draw(); });
+            }
+
+            move() {
+                const rect = new Rect(this.header.x, this.header.y, this.header.width, this.header.height, 'gray')
+                this.body.splice(0, 0, rect);
+
+                // 去尾巴（如果没吃到食物，那么去掉尾部）
+                if (!isEatFood) {
+                    this.body.pop()
+                } else {
+                    isEatFood = false;
+                }
+
+                switch (snake.direction) {
+                    case 37:
+                        this.header.x -= this.header.width;
+                        break;
+                    case 39:
+                        this.header.x += this.header.width;
+                        break;
+                    case 38:
+                        this.header.y -= this.header.height;
+                        break;
+                    case 40:
+                        this.header.y += this.header.height;
+                        break;
+                    default:
+                        break;
+                }
+
+
+                const isHitEdge = (this.header.x < 0 || this.header.x > canvas.width - UNIT) ||
+                    (this.header.y < 0 || this.header.y > canvas.height - UNIT);
+
+                // 判断蛇头和蛇身是否重叠
+                const isHitSelf = this.body.some(item => isRectHit(this.header, item));
+
+                (isHitEdge || isHitSelf) && gameOver();
+
+
+            }
+        }
+
+
+        let isEatFood = false;
+        let timer, snake, food;
+
+        const gameOver = () => {
+            alert(`game over! 得分 ${snake.body.length - 3}`);
+            !!timer && clearInterval(timer)
+        }
+
+        const randForFood = () => {
+            let isInSnake = true;
+            let food;
+            while (isInSnake) {
+                const x = getRandInRange(0, canvas.width - UNIT);
+                const y = getRandInRange(0, canvas.height - UNIT);
+                // 食物
+                food = new Rect(x, y, 40, 40, 'blue');
+                // 判断食物是否与蛇头重叠
+                if (isRectHit(food, snake.header)) {
+                    isInSnake = true;
+                    continue;
+                }
+
+                isInSnake = false;
+
+                // 判断食物是否与蛇身子重叠
+                // isInSnake = snake.body.some(item => isRectHit(item))
+                for (let i = 0; i < snake.body; i++) {
+                    if (isRectHit(food, snake.body[i])) {
+                        isInSnake = true;
+                        break;
+                    }
+                }
+            }
+            return food;
+        }
+
+
+        snake = new Snake();
+        snake.draw()
+
+        food = randForFood();
+
+        timer = setInterval(() => {
+            cvsCtx.clearRect(0, 0, canvas.width, canvas.height);
+            food.draw()
+            snake.draw()
+            snake.move()
+
+            if (isRectHit(snake.header, food)) {
+                isEatFood = true;
+                food = randForFood()
+            }
+        }, 200)
+
+
+
+        document.onkeydown = (ev) => {
+            const event = ev || window.event;
+            Math.abs(snake.direction - event.keyCode) !== 2 && (snake.direction = event.keyCode);
+        }
+
+
+    </script>
+</body>
+
+</html>
