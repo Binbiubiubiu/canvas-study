@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>矩形直线运动</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 600px;
+            height: 300px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body onload="draw()">
+    <canvas id="canvas" width="600" height="300">
+        浏览器不支持canvas
+    </canvas>
+    <script>
+        function draw() {
+            const canvas = document.getElementById('canvas');
+            const cvsCtx = canvas.getContext('2d');
+
+            // animate 直线运动
+
+            cvsCtx.beginPath();
+
+            /*
+            * canvas 的动画原理
+            * 1.绘制图像
+            * 2.清除图像
+            * 3.更新位置
+            * 4.绘制图像
+            * 2 -> 3 -> 4 -> 2 -> 3 -> 4
+            * */
+            let x = 0, y = 0, width = 100, height = 100;
+            cvsCtx.fillStyle = 'red';
+
+
+            let speedX = 2;
+            let speedY = 2;
+
+            setInterval(() => {
+                // 第二步： 清除画布
+                cvsCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 第三步： 更新位置
+                x += speedX;
+                // 判断x的值是否大于容器最右侧或小于容器最左侧
+                if (x > canvas.width - width || x < 0) {
+                    speedX *= -1
+                }
+
+                y += speedY;
+                if (y > canvas.height - height || y < 0) {
+                    speedY *= -1
+                }
+
+                cvsCtx.fillRect(x, y, width, height);
+            }, 30);
+
+
+
+        }
+    </script>
+</body>
+
+</html>

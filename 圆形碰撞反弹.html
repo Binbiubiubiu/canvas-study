@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>圆形碰撞反弹</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 600px;
+            height: 300px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body onload="draw()">
+    <canvas id="canvas" width="600" height="300">
+        浏览器不支持canvas
+    </canvas>
+    <script>
+        function draw() {
+            const canvas = document.getElementById('canvas');
+            const cvsCtx = canvas.getContext('2d');
+
+            // 圆形碰撞反弹
+            function Ball(x, y, r, speedX, speedY, color) {
+                // 设置属性
+                this.x = x;
+                this.y = y;
+                this.r = r;
+                this.speedX = speedX;
+                this.speedY = speedY;
+                this.color = color;
+
+                // 设置方法
+                this.draw = function () {
+                    cvsCtx.beginPath();
+                    cvsCtx.fillStyle = this.color;
+                    cvsCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+                    cvsCtx.fill();
+                }
+
+                this.move = function () {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+
+                    if (this.x > canvas.width - this.r || this.x < this.r) {
+                        this.speedX *= -1;
+                    }
+
+                    if (this.y > canvas.height - this.r || this.y < this.r) {
+                        this.speedY *= -1;
+                    }
+                }
+            }
+
+            const ball = new Ball(100, 100, 50, 2, 2, 'blue');
+            ball.draw()
+
+            function start() {
+                cvsCtx.clearRect(0, 0, canvas.width, canvas.height);
+                ball.move()
+                ball.draw();
+
+                window.requestAnimationFrame(start)
+            }
+
+            start()
+        }
+    </script>
+</body>
+
+</html>

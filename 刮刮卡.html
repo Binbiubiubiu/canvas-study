@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>刮刮卡</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+
+        }
+
+        canvas {
+            position: absolute;
+            left: 0;
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body onload="draw()">
+    <img width="400" height="400"
+        src="https://i0.hdslb.com/bfs/face/d19a34d4f2081baed11d575a516487763605b374.jpg@72w_72h.webp" />
+    <canvas id="canvas" width="400" height="400">
+        浏览器不支持canvas
+    </canvas>
+    <script>
+        function draw() {
+            const canvas = document.getElementById("canvas");
+            if (canvas.getContext) {
+                const cvsCtx = canvas.getContext('2d');
+
+                cvsCtx.beginPath();
+                cvsCtx.fillStyle = 'gray';
+                cvsCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+                cvsCtx.globalCompositeOperation = 'destination-out';
+                cvsCtx.lineWidth = 20;
+                cvsCtx.lineCap = 'round';
+                console.log(cvsCtx.getImageData(0, 0, 400, 400))
+
+                canvas.onmousedown = function (e) {
+                    const ev = e || window.event;
+                    const x = ev.clientX;
+                    const y = ev.clientY;
+
+                    cvsCtx.moveTo(x, y);
+
+                    canvas.onmousemove = function (e) {
+                        const ev = e || window.event;
+                        const x = ev.clientX;
+                        const y = ev.clientY;
+
+                        cvsCtx.lineTo(x, y);
+                        cvsCtx.stroke();
+                    }
+
+                    canvas.onmouseup = function () {
+                        canvas.onmousemove = null;
+                    }
+                }
+            }
+
+        }
+
+
+    </script>
+</body>
+
+</html>
