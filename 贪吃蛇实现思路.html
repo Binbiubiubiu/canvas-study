@@ -183,13 +183,13 @@
                 isInSnake = false;
 
                 // 判断食物是否与蛇身子重叠
-                // isInSnake = snake.body.some(item => isRectHit(item))
-                for (let i = 0; i < snake.body; i++) {
-                    if (isRectHit(food, snake.body[i])) {
-                        isInSnake = true;
-                        break;
-                    }
-                }
+                isInSnake = snake.body.some(item => isRectHit(item, food))
+                // for (let i = 0; i < snake.body; i++) {
+                //     if (isRectHit(food, snake.body[i])) {
+                //         isInSnake = true;
+                //         break;
+                //     }
+                // }
             }
             return food;
         }
