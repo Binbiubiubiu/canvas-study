@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>矩形碰撞检测</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 800px;
+            height: 600px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body onload="draw()">
+    <canvas id="canvas" width="800" height="600">
+        浏览器不支持canvas
+    </canvas>
+    <script>
+        function draw() {
+            const canvas = document.getElementById('canvas');
+            const cvsCtx = canvas.getContext('2d');
+
+            function Rect(x, y, width, height, color, speed) {
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+                this.color = color;
+                this.speed = speed;
+            }
+
+            Rect.prototype.draw = function () {
+                cvsCtx.beginPath();
+                cvsCtx.fillStyle = this.color;
+                cvsCtx.fillRect(this.x, this.y, this.width, this.height);
+                cvsCtx.closePath();
+            }
+
+            Rect.prototype.move = function () {
+                this.x += this.speed;
+
+                if (this.x >= canvas.width - this.width || this.x < 0) {
+                    this.speed *= -1;
+                }
+            }
+
+            const rect1 = new Rect(0, 100, 100, 100, 'red', 2);
+            const rect2 = new Rect(700, 100, 100, 100, 'blue', -2)
+
+            rect1.draw();
+            rect2.draw();
+
+            function animate() {
+                // 清除画布
+                cvsCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+                rect1.draw();
+                rect2.draw();
+
+                rect1.move();
+                rect2.move();
+
+                // 检测
+                if (isRectHit(rect1, rect2)) {
+                    rect1.speed *= -1
+                    rect2.speed *= -1
+                }
+
+                window.requestAnimationFrame(animate)
+            }
+
+            animate();
+
+            function isRectHit(rect1, rect2) {
+                // 获取矩形最小x 和最大x
+                const min1 = rect1.x;
+                const min2 = rect2.x;
+
+                const max1 = rect1.x + rect1.width;
+                const max2 = rect2.x + rect2.width;
+
+                const min3 = Math.max(min1, min2);
+                const max3 = Math.min(max1, max2);
+
+                return min3 < max3;
+
+            }
+        }
+    </script>
+</body>
+
+</html>

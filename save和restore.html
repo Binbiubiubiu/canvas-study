@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>save和restore</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 800px;
+            height: 800px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body onload="draw()">
+    <canvas id="canvas" width="800" height="800">
+        浏览器不支持canvas
+    </canvas>
+    <script>
+        function draw() {
+            const canvas = document.getElementById('canvas');
+            const cvsCtx = canvas.getContext('2d');
+
+            cvsCtx.beginPath();
+            cvsCtx.fillStyle = 'blue';
+            cvsCtx.save();
+            cvsCtx.fillRect(100, 100, 150, 150);
+            cvsCtx.closePath();
+
+            cvsCtx.beginPath();
+            cvsCtx.fillStyle = 'red';
+            cvsCtx.save();
+            cvsCtx.fillRect(100, 300, 150, 150);
+            cvsCtx.closePath();
+
+            cvsCtx.beginPath();
+            cvsCtx.restore();
+            cvsCtx.fillRect(350, 100, 150, 150); // 画图的颜色是save之前的颜色
+        }
+    </script>
+</body>
+
+</html>
