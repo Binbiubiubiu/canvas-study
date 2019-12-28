@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>水平全景滚动</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 600px;
+            height: 300px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body onload="draw()">
+    <canvas id="canvas" width="800" height="533">
+        浏览器不支持canvas
+    </canvas>
+    <script>
+        function draw() {
+            const canvas = document.getElementById('canvas');
+            const cvsCtx = canvas.getContext('2d');
+
+            var x = 0;
+
+            const bgImage = new Image();
+
+            bgImage.onload = function () {
+                backgroundMove(bgImage, 0, 0);
+            }
+
+            bgImage.src = './img/bg.jpg';
+
+            // 水平背景移动
+            function backgroundMove() {
+                cvsCtx.save();
+                cvsCtx.clearRect(0, 0, canvas.width, canvas.height);
+                cvsCtx.translate(-x, 0);
+                cvsCtx.drawImage(bgImage, 0, 0)
+                cvsCtx.drawImage(bgImage, canvas.width, 0)
+
+                x++;
+                if (x >= canvas.width) {
+                    x = 0;
+                }
+                cvsCtx.restore();
+                window.requestAnimationFrame(backgroundMove)
+
+            }
+
+            backgroundMove()
+
+        }
+    </script>
+</body>
+
+</html>
